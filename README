@@ -92,8 +92,7 @@ http://activewarehouse.rubyforge.org/etl
 == Tutorial
 
 A tutorial for ActiveWarehouse is available online at
-http://anthonyeden.com/2006/12/20/activewarehouse-example-with-rails-svn-logs
-(Note that is is out of date.)
+http://web.archive.org/web/20070722230250/http://anthonyeden.com/2006/12/20/activewarehouse-example-with-rails-svn-logs (Note that is is out of date.)
 
 You can also get a demo from the ActiveWarehouse subversion repository. Look in
 the SVN_ROOT/demo directory.
