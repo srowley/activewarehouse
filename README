@@ -1,58 +1,37 @@
 == ActiveWarehouse
 
 The ActiveWarehouse library provides classes and functions which help with
-building Data Warehouses using Rails. It can be installed either as a plugin
-or as a Gem.
+building Data Warehouses using Rails. 
 
-To install as a plugin just use:
+This is my fork of the project. I am just a Ruby/Rails hobbyist, but I have a bit of experience with data warehousing, so I had thought about doing something just like this before I found out about it.
 
-  script/plugin install --force svn://rubyforge.org/var/svn/activewarehouse/activewarehouse/trunk
+I will probably make wholesale changes to the tests and the code. In particular I'd like to move all the teststo RSpec, just because done well, specs can really document your intent beautifully. I also want to add a bit more magic to the generators to make setting up a simple warehouse as easy as it should be. I also don't really like all the fixtures setup, so I might see if that can be done with factories instead.
+
+The rest of this README is an edited version of the original. I am also planning to use this fork in a sample project, but it's not worth getting into that yet.
   
-To get the latest edge version.
-
-To install as a Gem, use:
-
-  gem install activewarehouse
-
-On *nix you will need to run this command as root or better yet, using sudo.
-
-Next, you will need to freeze or link the Gem to your Rails app. I prefer using
-the gemsonrails project:
-
-  gem install gemsonrails
-
-And then in your Rails app:
-
-  rake gems:link GEM=activewarehouse
-  
-It is possible that freezing the Gem to the Rails app may not work at all times. It is most often best to install as a plugin.
+I don't recommend using this fork in your project yet.
 
 == Generators
 
 ActiveWarehouse comes with several generators
 
-  script/generate fact Sales
-  script/generate fact sales
+  rails g fact Sales
  
     Creates a SalesFact class and a sales_facts table.
  
-  script/generate dimension Region
-  script/generate dimension region
+  rails g dimension Region
    
     Creates a RegionDimension class and a region_dimension table.
  
-  script/generate cube RegionalSales
-  script/generate cube regional_sales
+  rails g cube RegionalSales
  
     Creates a RegionalSalesCube class.
    
   script/generate bridge CustomerHierarchy
-  script/generate bridge customer_hierarchy
    
     Creates a CustomerHierarchyBridge class.
    
-  script/generate dimension_view OrderDate Date
-  script/generate dimension_view order_date date
+  rails g dimension_view OrderDate Date
   
     Creates an OrderDateDimension class which is represented by a view on top
     of the DateDimension.
@@ -79,20 +58,9 @@ Dimension View:
 == ETL
 
 The ActiveWarehouse plugin does not directly handle Extract-Transform-Load
-processes, however the ActiveWarehouse ETL gem (installed separately) can help.
-To install it use:
-
-  gem install activewarehouse-etl
-
-Once again you should run this command as root or using sudo.
-  
-More information on the ETL process can be found at
-http://activewarehouse.rubyforge.org/etl
+processes, however the ActiveWarehouse ETL gem can help.
 
 == Tutorial
 
 A tutorial for ActiveWarehouse is available online at
 http://web.archive.org/web/20070722230250/http://anthonyeden.com/2006/12/20/activewarehouse-example-with-rails-svn-logs (Note that is is out of date.)
-
-You can also get a demo from the ActiveWarehouse subversion repository. Look in
-the SVN_ROOT/demo directory.
