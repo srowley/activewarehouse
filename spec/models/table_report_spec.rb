@@ -12,6 +12,7 @@ describe ActiveWarehouse::Report::TableReport, ".view" do
       :row_hierarchy => :cy,
       :fact_attributes => [:cost_dollar_amount, :sales_dollar_amount]
     )
+    puts "foo"
   end
 
   it "should return a TableView instance" do
