@@ -4,7 +4,6 @@ require 'factories/dimensions.rb'
 describe ActiveWarehouse::Dimension, :new => true do
   
   before(:all) do
-    @dates = []
     attrs = {}
     first_date = Date.new(2001,1,1)
     # TODO build this using a range or something. "2922.times"? Really?
@@ -177,7 +176,7 @@ describe ActiveWarehouse::Dimension, :new => true do
   end
   
   describe "::Node#children" do  
-    context "given a value for a child node that exists" do
+    context "given a root node" do
       it "returns true" do
         root = DateDimension.available_values_tree(:cy)
         root.children.collect { |node| node.value}.should == ('2001'..'2008').to_a
