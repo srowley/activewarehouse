@@ -1,11 +1,11 @@
 ## ActiveWarehouse
 
 The ActiveWarehouse library provides classes and functions which help with
-building Data Warehouses using Rails. 
+building data warehouses using Rails. 
 
 This is my fork of the project. I am just a Ruby/Rails hobbyist, but I have a bit of experience with data warehousing, so I had thought about doing something just like this before I found out about it.
 
-I will probably make wholesale changes to the tests and the code. In particular I'd like to move all the teststo RSpec, just because done well, specs can really document your intent beautifully. I also want to add a bit more magic to the generators to make setting up a simple warehouse as easy as it should be. I also don't really like all the fixtures setup, so I might see if that can be done with factories instead.
+I will probably make wholesale changes to the tests and the code. In particular I'd like to move all the tests to RSpec, just because done well, specs can really document your intent beautifully. I also want to add a bit more magic to the generators to make setting up a simple warehouse as easy as it should be. I also don't really like all the fixtures setup, so I might see if that can be done with factories instead.
 
 The rest of this README is an edited version of the original. I am also planning to use this fork in a sample project, but it's not worth getting into that yet.
   
