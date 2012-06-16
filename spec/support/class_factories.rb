@@ -87,4 +87,32 @@ module ClassFactories
     end
   end
   
+  def create_daily_sales_facts
+    create_class("DailySalesFact", ActiveWarehouse::Fact)
+    
+    ActiveRecord::Schema.define do
+      create_table :daily_sales_facts do |t|
+        t.column :date_id, :integer
+        t.column :store_id, :integer
+        t.column :cost, :integer
+      end
+    end
+  end
+  
+  def create_store_inventory_snapshot_fact
+    create_class("StoreInventorySnapshotFact", ActiveWarehouse::Fact)
+  
+    ActiveRecord::Schema.define do
+      create_table :store_inventory_snapshot_facts do |t|
+        t.column :date_id, :integer
+        t.column :product_id, :integer
+        t.column :store_id, :integer
+        t.column :quantity_on_hand, :integer
+        t.column :quantity_sold, :integer
+        t.column :dollar_value_at_cost, :decimal, :scale => 2, :precision => 18
+        t.column :dollar_value_at_latest_selling_price, :decimal, :scale => 2, :precision => 18
+      end
+    end
+  end
+  
 end

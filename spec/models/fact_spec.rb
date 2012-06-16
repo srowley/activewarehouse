@@ -26,6 +26,31 @@ describe ActiveWarehouse::Fact, :new => true do
 
     PosRetailSalesTransactionFact.prejoin :product => [:category_description, :brand_description]
     PosRetailSalesTransactionFact.prejoin :promotion => [:promotion_name]
+    
+    create_daily_sales_facts
+    create_class("StoreDimension", ActiveWarehouse::Dimension)
+    DailySalesFact.aggregate :cost
+    DailySalesFact.aggregate :id, :type => :count, :distinct => true, :label => 'Num Sales'
+    DailySalesFact.dimension :date
+    DailySalesFact.dimension :store
+    DailySalesFact.has_and_belongs_to_many_dimension :product, 
+                           :join_table => 'sales_products_bridge', :foreign_key => 'sale_id'
+                           
+    create_store_inventory_snapshot_fact
+    StoreInventorySnapshotFact.aggregate :quantity_on_hand, :semiadditive => :date, :label => 'Sum Quantity on Hand'
+    StoreInventorySnapshotFact.aggregate :quantity_sold, :label => 'Sum Quantity Sold'
+    StoreInventorySnapshotFact.aggregate :dollar_value_at_cost, :label => 'Sum Dollar Value At Cost'
+    StoreInventorySnapshotFact.aggregate :dollar_value_at_latest_selling_price, :label => 'Sum Value At Latest Price'
+     
+     StoreInventorySnapshotFact.calculated_field (:gmroi) do |r| 
+       (r.quantity_sold * (r.dollar_value_at_latest_selling_price - r.dollar_value_at_cost)) / 
+       (r.quantity_on_hand * r.dollar_value_at_latest_selling_price)
+     end
+     
+     StoreInventorySnapshotFact.dimension :date
+     StoreInventorySnapshotFact.dimension :store
+     StoreInventorySnapshotFact.dimension :product
+                          
   end
     
   describe "#dimensions" do
@@ -130,34 +155,40 @@ describe ActiveWarehouse::Fact, :new => true do
     end
   end
   
-  # TODO: move this where it belongs
+  # TODO: move these where they belong
   describe "AggregateField#strategy.name" do
-    it "returns the strategy name for given AggregateField" do
-      sales_quantity = PosRetailSalesTransactionFact.aggregate_field_for_name(:sales_quantity)
-      sales_quantity.strategy_name.should == :sum
+    context "given a fact table with simple aggregation" do
+      it "returns the strategy name for given AggregateField" do
+        sales_quantity = PosRetailSalesTransactionFact.aggregate_field_for_name(:sales_quantity)
+        sales_quantity.strategy_name.should == :sum
+      end
+    end
+    
+    context "given a fact table with more complex aggregation" do  
+      it "returns the strategy name for given AggregateField" do
+        quantity_on_hand  = StoreInventorySnapshotFact.aggregate_field_for_name(:quantity_on_hand )
+        quantity_on_hand.strategy_name.should == :sum
+      end
+    end 
+  end
+  
+  describe "AggregateField#semiadditive_over" do
+    it "returns dimension over which aggregate field is semi-additive" do
+      quantity_on_hand = StoreInventorySnapshotFact.aggregate_field_for_name(:quantity_on_hand)
+      quantity_on_hand.semiadditive_over.should == DateDimension
     end
   end
   
   describe "#has_semiadditive_fact?" do
-    it "returns false when the fact table has no semi-additive facts" do
+    it "returns false when the fact table doesn't have semi-additive facts" do
       PosRetailSalesTransactionFact.has_semiadditive_fact?.should be_false
     end
+    
+    it "returns true when the fact table has semi-additive facts" do
+      StoreInventorySnapshotFact.has_semiadditive_fact?.should be_true
+    end
   end
-
-#  def test_complex_aggregate_fields
-#    aggregate_fields = StoreInventorySnapshotFact.aggregate_fields
-#    assert_not_nil aggregate_fields
-#    assert_equal 4, aggregate_fields.length
-#    
-#    quantity_on_hand = StoreInventorySnapshotFact.aggregate_field_for_name(:quantity_on_hand)
-#    assert_not_nil quantity_on_hand
-#    assert_equal :sum, quantity_on_hand.strategy_name
-#    assert quantity_on_hand.is_semiadditive?
-#    assert_equal DateDimension, quantity_on_hand.semiadditive_over
-#    
-#    assert StoreInventorySnapshotFact.has_semiadditive_fact?
-#  end
-#  
+  
   describe "#calculated_field" do
     it "is missing a test"
   end
@@ -209,11 +240,17 @@ describe ActiveWarehouse::Fact, :new => true do
     end
   end
   
-  #  
-  #  def test_dimension_relationship
-  #    assert DailySalesFact.belongs_to_relationship?(:date)
-  #    assert DailySalesFact.has_and_belongs_to_many_relationship?(:product)
-  #  end
+  describe "#belongs_to_relationship?" do                      
+    it "returns true if the fact belongs_to the given dimension" do
+      DailySalesFact.belongs_to_relationship?(:date).should be_true
+    end
+  end
+  
+  describe "#has_and_belongs_to_many_relationship?" do                      
+    it "returns true if the fact has_many of and belongs_to the given dimension" do
+      DailySalesFact.has_and_belongs_to_many_relationship?(:product).should be_true
+    end
+  end
   
 end
 
