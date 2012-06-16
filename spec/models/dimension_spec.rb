@@ -4,18 +4,17 @@ require 'factories/dimensions.rb'
 describe ActiveWarehouse::Dimension, :new => true do
   
   before(:all) do
+    create_date_dimension
     attrs = {}
-    first_date = Date.new(2001,1,1)
-    # TODO build this using a range or something. "2922.times"? Really?
-    2922.times { |i|
-      current_date = first_date + i.days
-      attrs[:calendar_year] = current_date.strftime("%Y")
-      attrs[:calendar_quarter] = "Q#{((current_date.strftime("%m").to_f + 1) / 3).round }" 
-      attrs[:calendar_month_name] = current_date.strftime("%B")
-      attrs[:calendar_week] = current_date.strftime("%V")
-      attrs[:day_of_week] = current_date.strftime("%A")
+    
+    (Date.new(2001, 1, 1)..Date.new(2008, 12, 31)).each do |date|
+      attrs[:calendar_year] = date.strftime("%Y")
+      attrs[:calendar_quarter] = "Q#{((date.strftime("%m").to_f + 1) / 3).round }" 
+      attrs[:calendar_month_name] = date.strftime("%B")
+      attrs[:calendar_week] = date.strftime("%V")
+      attrs[:day_of_week] = date.strftime("%A")
       FactoryGirl.create(:date_dimension, attrs)
-     }
+    end
     
     DateDimension.set_order :id
     DateDimension.define_hierarchy :cy, [:calendar_year, :calendar_quarter, :calendar_month_name, :calendar_week, :day_of_week]
