@@ -80,7 +80,7 @@ describe ActiveWarehouse::AggregateField, :new => true do
   end
   
   describe "#label_for_table" do
-    it "returns the lable name in downcase-underscore format" do
+    it "returns the label name in downcase-underscore format" do
       @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact,
           StoreInventorySnapshotFact.columns_hash["quantity_sold"], :sum, :label => "My Sum")
       @field.label_for_table.should == "my_sum"
