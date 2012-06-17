@@ -5,6 +5,7 @@ def set_up_classes
   create_promotion_dimension
   model_daily_sales_facts
   model_store_inventory_snapshot_fact
+  model_customer_hierarchy_bridge
 end
 
 
@@ -175,6 +176,11 @@ def model_store_inventory_snapshot_fact
   StoreInventorySnapshotFact.dimension :date
   StoreInventorySnapshotFact.dimension :store
   StoreInventorySnapshotFact.dimension :product
+end
+
+def model_customer_hierarchy_bridge
+  create_class("CustomerHierarchyBridge", ActiveWarehouse::HierarchyBridge)
+  CustomerHierarchyBridge.set_top_flag_value 'Y'
 end
 
 def create_class(class_name, parent)
