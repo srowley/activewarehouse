@@ -3,7 +3,7 @@ require 'active_record'
 require 'activewarehouse'
 require 'database_cleaner'
 require 'factory_girl_rails'
-require 'support/class_factories'
+require 'support/setup'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
@@ -13,7 +13,11 @@ RSpec.configure do |config|
   Dir[("./support/**/*.rb")].each {|f| require f}
   
   config.filter = { :new => true }
-  config.include ClassFactories  
+  
+  config.before(:suite) do
+    set_up_classes
+  end
+  
   
 end
 

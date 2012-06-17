@@ -1,58 +1,7 @@
 require 'spec_helper'
 require 'factories/facts.rb'
 
-describe ActiveWarehouse::Fact, :new => true do
-  
-  before(:all) do
-    create_product_dimension
-    create_promotion_dimension
-    create_pos_retail_sales_transaction_facts
-    PosRetailSalesTransactionFact.aggregate :sales_quantity, :label => 'Sum of Sales Quantity'
-    PosRetailSalesTransactionFact.aggregate :sales_quantity, :label => 'Sum of Sales Quantity Self', :levels_from_parent => [0]
-    PosRetailSalesTransactionFact.aggregate :sales_quantity, :label => 'Sum of Sales Quantity Me and Immediate children', :levels_from_parent => [:self, 1]
-    PosRetailSalesTransactionFact.aggregate :sales_dollar_amount, :label => 'Sum of Sales Amount'
-    PosRetailSalesTransactionFact.aggregate :cost_dollar_amount, :label => 'Sum of Cost'
-    PosRetailSalesTransactionFact.aggregate :gross_profit_dollar_amount, :label => 'Sum of Gross Profit'
-    PosRetailSalesTransactionFact.aggregate :sales_quantity, :type => :count, :label => 'Sales Quantity Count'
-    PosRetailSalesTransactionFact.aggregate :sales_dollar_amount, :type => :avg, :label => 'Avg Sales Amount'
-
-    PosRetailSalesTransactionFact.calculated_field (:gross_margin) { |r| r.gross_profit_dollar_amount / r.sales_dollar_amount}
-
-    PosRetailSalesTransactionFact.dimension :date
-    PosRetailSalesTransactionFact.dimension :store
-    PosRetailSalesTransactionFact.dimension :product
-    PosRetailSalesTransactionFact.dimension :promotion
-    PosRetailSalesTransactionFact.dimension :customer
-
-    PosRetailSalesTransactionFact.prejoin :product => [:category_description, :brand_description]
-    PosRetailSalesTransactionFact.prejoin :promotion => [:promotion_name]
-    
-    create_daily_sales_facts
-    create_class("StoreDimension", ActiveWarehouse::Dimension)
-    DailySalesFact.aggregate :cost
-    DailySalesFact.aggregate :id, :type => :count, :distinct => true, :label => 'Num Sales'
-    DailySalesFact.dimension :date
-    DailySalesFact.dimension :store
-    DailySalesFact.has_and_belongs_to_many_dimension :product, 
-                           :join_table => 'sales_products_bridge', :foreign_key => 'sale_id'
-                           
-    create_store_inventory_snapshot_fact
-    StoreInventorySnapshotFact.aggregate :quantity_on_hand, :semiadditive => :date, :label => 'Sum Quantity on Hand'
-    StoreInventorySnapshotFact.aggregate :quantity_sold, :label => 'Sum Quantity Sold'
-    StoreInventorySnapshotFact.aggregate :dollar_value_at_cost, :label => 'Sum Dollar Value At Cost'
-    StoreInventorySnapshotFact.aggregate :dollar_value_at_latest_selling_price, :label => 'Sum Value At Latest Price'
-     
-     StoreInventorySnapshotFact.calculated_field (:gmroi) do |r| 
-       (r.quantity_sold * (r.dollar_value_at_latest_selling_price - r.dollar_value_at_cost)) / 
-       (r.quantity_on_hand * r.dollar_value_at_latest_selling_price)
-     end
-     
-     StoreInventorySnapshotFact.dimension :date
-     StoreInventorySnapshotFact.dimension :store
-     StoreInventorySnapshotFact.dimension :product
-                          
-  end
-    
+describe ActiveWarehouse::Fact, :new => true do  
   describe "#dimensions" do
     it "returns an array of the fact table's dimensions'" do
       PosRetailSalesTransactionFact.dimensions.sort { |a, b| a.to_s <=> b.to_s}.should == [:customer, :date, :product, :promotion, :store]
@@ -152,30 +101,6 @@ describe ActiveWarehouse::Fact, :new => true do
   describe "#aggregate_field_for_name" do
     it "returns a value" do
       PosRetailSalesTransactionFact.aggregate_field_for_name(:sales_quantity).should_not be_nil
-    end
-  end
-  
-  # TODO: move these where they belong
-  describe "AggregateField#strategy.name" do
-    context "given a fact table with simple aggregation" do
-      it "returns the strategy name for given AggregateField" do
-        sales_quantity = PosRetailSalesTransactionFact.aggregate_field_for_name(:sales_quantity)
-        sales_quantity.strategy_name.should == :sum
-      end
-    end
-    
-    context "given a fact table with more complex aggregation" do  
-      it "returns the strategy name for given AggregateField" do
-        quantity_on_hand  = StoreInventorySnapshotFact.aggregate_field_for_name(:quantity_on_hand )
-        quantity_on_hand.strategy_name.should == :sum
-      end
-    end 
-  end
-  
-  describe "AggregateField#semiadditive_over" do
-    it "returns dimension over which aggregate field is semi-additive" do
-      quantity_on_hand = StoreInventorySnapshotFact.aggregate_field_for_name(:quantity_on_hand)
-      quantity_on_hand.semiadditive_over.should == DateDimension
     end
   end
   

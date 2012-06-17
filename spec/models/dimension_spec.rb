@@ -2,11 +2,9 @@ require 'spec_helper'
 require 'factories/dimensions.rb'
 
 describe ActiveWarehouse::Dimension, :new => true do
-  
   before(:all) do
-    create_date_dimension
     attrs = {}
-    
+
     (Date.new(2001, 1, 1)..Date.new(2008, 12, 31)).each do |date|
       attrs[:calendar_year] = date.strftime("%Y")
       attrs[:calendar_quarter] = "Q#{((date.strftime("%m").to_f + 1) / 3).round }" 
@@ -15,9 +13,6 @@ describe ActiveWarehouse::Dimension, :new => true do
       attrs[:day_of_week] = date.strftime("%A")
       FactoryGirl.create(:date_dimension, attrs)
     end
-    
-    DateDimension.set_order :id
-    DateDimension.define_hierarchy :cy, [:calendar_year, :calendar_quarter, :calendar_month_name, :calendar_week, :day_of_week]
   end
   
   describe "#hierarchy" do
@@ -30,7 +25,7 @@ describe ActiveWarehouse::Dimension, :new => true do
   describe "#hierarchies" do
     
     it "returns an array of hierarchies" do
-      DateDimension.hierarchies.should == [:cy]
+      DateDimension.hierarchies.should == [:cy, :fy, :rollup]
     end
   end
   
