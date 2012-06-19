@@ -4,6 +4,7 @@ require 'activewarehouse'
 require 'database_cleaner'
 require 'factory_girl_rails'
 require 'support/setup'
+require 'ffaker'
 
 ActiveRecord::Base.establish_connection(:adapter => "sqlite3", :database => ":memory:")
 
@@ -16,6 +17,7 @@ RSpec.configure do |config|
   
   config.before(:suite) do
     set_up_classes
+    FactoryGirl.reload
   end
   
   

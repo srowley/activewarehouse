@@ -14,6 +14,7 @@ group :test do
   gem "factory_girl_rails"
   gem 'SystemTimer',  :platform => :mri_18
   gem "database_cleaner", ">= 0.7.2"
+  gem "ffaker"
 end
 
 group :development, :test do

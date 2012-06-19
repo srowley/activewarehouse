@@ -1,7 +1,7 @@
 def set_up_classes
   model_date_dimension
   model_pos_retail_sales_transaction_fact
-  create_product_dimension
+  model_product_dimension
   create_promotion_dimension
   model_daily_sales_facts
   model_store_inventory_snapshot_fact
@@ -100,6 +100,12 @@ def create_product_dimension
       t.column :expiration_date, :datetime
     end
   end
+end
+
+def model_product_dimension
+  create_product_dimension
+  ProductDimension.acts_as_slowly_changing_dimension
+  ProductDimension.define_hierarchy :brand, [:brand_description]
 end
 
 def create_promotion_dimension
