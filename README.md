@@ -16,31 +16,31 @@ I don't recommend using this fork in your project yet.
 ActiveWarehouse comes with several generators:
 
 ```
-rails g fact Sales
+rails g active_warehouse:fact Sales
 ``` 
 
 Creates a SalesFact class and a sales_facts table.
  
 ```
-rails g dimension Region
+rails g active_warehouse:dimension Region
 ```
 
 Creates a RegionDimension class and a region_dimension table.
  
 ```
-rails g cube RegionalSales
+rails g active_warehouse:cube RegionalSales
 ``` 
 
 Creates a RegionalSalesCube class.
    
 ```
-rails g bridge CustomerHierarchy
+rails g active_warehouse:bridge CustomerHierarchy
 ```
 
 Creates a CustomerHierarchyBridge class.
    
 ```
-rails g dimension_view OrderDate Date
+rails g active_warehouse:dimension_view OrderDate Date
 ```
   
 Creates an OrderDateDimension class which is represented by a view on top of the DateDimension.
