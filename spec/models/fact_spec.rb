@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'factories/facts.rb'
 
 describe ActiveWarehouse::Fact, :new => true do  
   describe "#dimensions" do
