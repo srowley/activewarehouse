@@ -1,43 +1,35 @@
 require 'spec_helper'
-require 'factories/dimensions.rb'
 
 describe ActiveWarehouse::Dimension, :new => true do
   before(:all) do
-    attrs = {}
-
     (Date.new(2001, 1, 1)..Date.new(2008, 12, 31)).each do |date|
-      attrs[:calendar_year] = date.strftime("%Y")
-      attrs[:calendar_quarter] = "Q#{((date.strftime("%m").to_f + 1) / 3).round }" 
-      attrs[:calendar_month_name] = date.strftime("%B")
-      attrs[:calendar_week] = date.strftime("%V")
-      attrs[:day_of_week] = date.strftime("%A")
-      FactoryGirl.create(:date_dimension, attrs)
+      FactoryGirl.create(:date_incremented_by_day)
     end
   end
   
+  after(:all) do
+    DateDimension.delete_all
+  end
+  
   describe "#hierarchy" do
-   
     it "returns an array of attributes in a hierarchy" do
       DateDimension.hierarchy(:cy).should == [:calendar_year, :calendar_quarter, :calendar_month_name, :calendar_week, :day_of_week]
     end
   end
   
   describe "#hierarchies" do
-    
     it "returns an array of hierarchies" do
       DateDimension.hierarchies.should == [:cy, :fy, :rollup]
     end
   end
   
   describe "#table_name" do
-    
     it "returns the name of the database table for the dimension" do
       DateDimension.table_name.should == "date_dimension"
     end
   end
   
   describe "#class_name" do
-    
     context "given the dimension name as a symbol" do
       it "returns the name of the Dimension subclass" do
         DateDimension.class_name(:date).should == "DateDimension"
@@ -58,7 +50,6 @@ describe ActiveWarehouse::Dimension, :new => true do
   end
   
   describe "#class_for_name" do
-    
     context "given the dimension name as a symbol" do
       it "returns the Dimension subclass" do
         DateDimension.class_for_name(:date).should == DateDimension
@@ -85,7 +76,6 @@ describe ActiveWarehouse::Dimension, :new => true do
   end
   
   describe "#to_dimension" do
-    
     context "when called on the subclass" do
       context "given the dimension name as a symbol" do
         it "returns the Dimension subclass" do 
@@ -128,7 +118,6 @@ describe ActiveWarehouse::Dimension, :new => true do
   end
   
   describe "#available_child_values" do
-    
     context "given an empty array" do
       it "returns the values for the field at the hierarchy root" do
         DateDimension.available_child_values(:cy, []).should == ["2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008"]
@@ -151,7 +140,6 @@ describe ActiveWarehouse::Dimension, :new => true do
   # replaced original test based on Store dimension with one based on Date
   # in order to avoid creating/populating two dimension tables
   describe "#available_values_tree" do
-  
     #TODO: why do we care?
     it "returns a value of 'All'" do
       root = DateDimension.available_values_tree(:cy)
@@ -160,7 +148,6 @@ describe ActiveWarehouse::Dimension, :new => true do
   end
   
   describe "::Node#has_child?" do
-    
     context "given a value for a child node that exists" do
       it "returns true" do
         root = DateDimension.available_values_tree(:cy)
@@ -187,7 +174,6 @@ describe ActiveWarehouse::Dimension, :new => true do
   end
     
   describe "#denominator_count" do
-
     # TODO: revisit the need for multiple examples in the two contexts below
     # including them all out of an abundance of caution, but feels like overkill
     context "given a hierarchy level to count distinct values of at a given level" do

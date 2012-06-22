@@ -14,6 +14,7 @@ def create_date_dimension
       
   ActiveRecord::Schema.define do
     create_table :date_dimension do |t| 
+      t.column :date, :string, :null => false                               # 2005, 2006, 2007, etc.
       t.column :calendar_year, :string, :null => false                      # 2005, 2006, 2007, etc.
       t.column :calendar_quarter, :string, :null => false, :limit => 2      # Q1, Q2, Q3 or Q4
       t.column :calendar_month_name, :string, :null => false, :limit => 9   # January, February, etc.
