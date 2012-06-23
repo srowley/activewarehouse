@@ -22,6 +22,7 @@ def create_date_dimension
       t.column :calendar_month_name, :string, :null => false, :limit => 9   # January, February, etc.
       t.column :calendar_week, :string, :null => false, :limit => 2         # 1, 2, 3, ... 52
       t.column :day_of_week, :string, :null => false, :limit => 9           # Monday, Tuesday, etc.
+      t.column :sql_date_stamp, :date
     end
   end
 end
