@@ -3,12 +3,13 @@ require "spec_helper"
 describe ActiveWarehouse::SlowlyChangingDimension, :new => true do
 
   before(:all) do
-    @old_product = FactoryGirl.create(:product_dimension, :expiration_date => Time.gm(2006, 11, 30), :latest_version => 0)
-    @new_product = @old_product.dup
-    @new_product.effective_date, @new_product.expiration_date = Time.gm(2006, 12, 1), Time.gm(9999, 1, 1)
-    @new_product.latest_version = 1
-    @new_product.save
-    @another_product = FactoryGirl.create(:product_dimension)
+    @old_product = FactoryGirl.create(:base_product, :expiration_date => Time.gm(2006, 11, 30), :latest_version => 0)
+    @new_product = FactoryGirl.create(:base_product, :effective_date => Time.gm(2006, 12, 1), :expiration_date => Time.gm(9999, 1, 1))
+    @another_product = FactoryGirl.create(:base_product)
+  end
+  
+  after(:all) do
+    ProductDimension.delete_all
   end
 
   describe "#latest_version_attribute" do

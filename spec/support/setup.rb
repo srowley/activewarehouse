@@ -3,6 +3,8 @@ def set_up_classes
   model_pos_retail_sales_transaction_fact
   model_product_dimension
   create_promotion_dimension
+  model_store_dimension
+  model_customer_dimension
   model_daily_sales_facts
   model_store_inventory_snapshot_fact
   model_customer_hierarchy_bridge
@@ -129,6 +131,47 @@ def create_promotion_dimension
   end
 end
 
+def create_store_dimension
+  create_class("StoreDimension", ActiveWarehouse::Dimension)
+  
+  ActiveRecord::Schema.define do
+    create_table :store_dimension do |t|
+      t.column :store_name, :string
+      t.column :store_number, :string
+      t.column :store_street_address, :string
+      t.column :store_city, :string
+      t.column :store_county, :string
+      t.column :store_state, :string
+      t.column :store_zip_code, :string
+      t.column :store_manager, :string
+      t.column :store_district, :string
+      t.column :store_region, :string
+      t.column :first_open_date, :integer # FK with view on date_dimension
+      t.column :last_remodal_date, :integer # FK with view on date_dimension
+    end
+  end
+end
+
+def model_store_dimension
+  create_store_dimension
+  StoreDimension.define_hierarchy :location, [:store_state, :store_county, :store_city]
+  StoreDimension.define_hierarchy :region, [:store_region, :store_district]
+end
+
+def create_customer_dimension
+  create_class("CustomerDimension", ActiveWarehouse::Dimension)
+  ActiveRecord::Schema.define do
+    create_table :customer_dimension do |t|
+      t.column :customer_name, :string
+    end
+  end
+end
+
+def model_customer_dimension
+  create_customer_dimension
+  CustomerDimension.acts_as_hierarchical_dimension
+end
+
 def create_daily_sales_fact
   create_class("DailySalesFact", ActiveWarehouse::Fact)
   
@@ -143,7 +186,6 @@ end
 
 def model_daily_sales_facts
   create_daily_sales_fact
-  create_class("StoreDimension", ActiveWarehouse::Dimension)
   DailySalesFact.aggregate :cost
   DailySalesFact.aggregate :id, :type => :count, :distinct => true, :label => 'Num Sales'
   DailySalesFact.dimension :date
