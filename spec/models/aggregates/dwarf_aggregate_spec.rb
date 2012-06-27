@@ -4,7 +4,10 @@ describe ActiveWarehouse::Aggregate::DwarfAggregate, :new => true do
   
   # TODO: the original test didn't check to see if this raised an error.
   # It actually made no assertions at all. So this is no worse, I guess.
-  describe "the algorithm" do 
+  # Calling #create_dwarf_cube prints out some output that probably shows
+  # the aggregate build path; need to look into that more.
+  
+  describe "#create_dwarf_cube" do 
     it "shouldn't raise an error" do
       fact_table = [
         ['S1','C2','P2',70],

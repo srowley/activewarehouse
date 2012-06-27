@@ -8,11 +8,15 @@ def set_up_classes
   model_daily_sales_facts
   model_store_inventory_snapshot_fact
   model_customer_hierarchy_bridge
+  model_salesperson_sales_facts
+  model_salesperson_dimension
+  model_salesperson_hierarchy_bridge
+  create_sales_products_bridge
 end
 
 
 def create_date_dimension
-  create_class("DateDimension", ActiveWarehouse::Dimension)
+  create_class("DateDimension", ActiveWarehouse::DateDimension)
       
   ActiveRecord::Schema.define do
     create_table :date_dimension do |t| 
@@ -108,8 +112,12 @@ end
 
 def model_product_dimension
   create_product_dimension
+#  create_class("DailySalesFact", ActiveWarehouse::Fact)
   ProductDimension.acts_as_slowly_changing_dimension
   ProductDimension.define_hierarchy :brand, [:brand_description]
+# ProductDimension.has_and_belongs_to_many :sales, :class_name => DailySalesFact,
+#                        :join_table => 'sales_products_bridge', :association_foreign_key => 'sale_id'
+  
 end
 
 def create_promotion_dimension
@@ -171,11 +179,13 @@ end
 def model_customer_dimension
   create_customer_dimension
   CustomerDimension.acts_as_hierarchical_dimension
+  CustomerDimension.define_hierarchy :customer_name, [:customer_name]
+  CustomerDimension.child_bridge :child_bridge
+  CustomerDimension.parent_bridge :parent_bridge
 end
 
 def create_daily_sales_fact
   create_class("DailySalesFact", ActiveWarehouse::Fact)
-  
   ActiveRecord::Schema.define do
     create_table :daily_sales_facts do |t|
       t.column :date_id, :integer
@@ -228,10 +238,99 @@ def model_store_inventory_snapshot_fact
   StoreInventorySnapshotFact.dimension :product
 end
 
-def model_customer_hierarchy_bridge
+def create_customer_hierarchy_bridge
   create_class("CustomerHierarchyBridge", ActiveWarehouse::HierarchyBridge)
+  ActiveRecord::Schema.define do
+    create_table :customer_hierarchy_bridge do |t|
+      t.column :parent_id, :integer
+      t.column :child_id, :integer
+      t.column :num_levels_from_parent, :integer
+      t.column :bottom_flag, :string
+      t.column :is_top, :string
+    end
+  end
+end
+
+def model_customer_hierarchy_bridge
+  create_customer_hierarchy_bridge
   CustomerHierarchyBridge.set_top_flag_value 'Y'
 end
+
+def create_salesperson_sales_facts
+  create_class("SalespersonSalesFact", ActiveWarehouse::Fact)
+  ActiveRecord::Schema.define do
+    create_table :salesperson_sales_facts do |t|
+      t.column :date_id, :integer
+      t.column :product_id, :integer
+      t.column :salesperson_id, :integer
+      t.column :cost, :integer
+    end
+  end
+end
+
+def model_salesperson_sales_facts
+  create_salesperson_sales_facts
+  SalespersonSalesFact.aggregate :cost
+  SalespersonSalesFact.aggregate :cost, :type => :count, :label => 'Num Sales'
+  
+  SalespersonSalesFact.dimension :date
+  SalespersonSalesFact.dimension :salesperson, :slowly_changing => :date
+  SalespersonSalesFact.dimension :product
+end
+
+def create_salesperson_dimension
+  create_class("SalespersonDimension", ActiveWarehouse::Dimension)
+  ActiveRecord::Schema.define do
+    create_table :salesperson_dimension do |t|
+      t.column :name, :string
+      t.column :region, :string
+      t.column :sub_region, :string
+      t.column :effective_date,:datetime
+      t.column :expiration_date, :datetime
+    end
+  end
+end
+
+def model_salesperson_dimension
+  create_salesperson_dimension
+  SalespersonDimension.acts_as_hierarchical_dimension
+  SalespersonDimension.acts_as_slowly_changing_dimension
+  SalespersonDimension.define_hierarchy :name, [:name]
+  SalespersonDimension.define_hierarchy :region, [:region, :sub_region]
+  SalespersonDimension.child_bridge :child_bridge
+  SalespersonDimension.parent_bridge :parent_bridge
+end
+
+def create_salesperson_hierarchy_bridge
+  create_class("SalespersonHierarchyBridge", ActiveWarehouse::HierarchyBridge)
+  ActiveRecord::Schema.define do
+    create_table :salesperson_hierarchy_bridge do |t|
+      t.column :parent_id, :integer
+      t.column :child_id, :integer
+      t.column :num_levels_from_parent, :integer
+      t.column :effective_date, :datetime
+      t.column :expiration_date, :datetime
+      t.column :bottom_flag, :string
+      t.column :is_top, :string
+    end
+  end
+end
+
+def model_salesperson_hierarchy_bridge
+  create_salesperson_hierarchy_bridge
+  SalespersonHierarchyBridge.set_top_flag_value 'Y'
+end
+
+def create_sales_products_bridge
+  create_class("SalesProductsBridge", ActiveWarehouse::Bridge)
+  ActiveRecord::Schema.define do
+    create_table :sales_products_bridge, :id => false do |t|
+      t.column :sale_id, :integer
+      t.column :product_id, :integer
+    end
+  end
+end
+
 
 def create_class(class_name, parent)
   Object.send(:remove_const, class_name) rescue nil

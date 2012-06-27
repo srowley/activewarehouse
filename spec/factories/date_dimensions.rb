@@ -1,6 +1,7 @@
 FactoryGirl.define do
 
   factory :base_date, :class => DateDimension  do
+    sql_date_stamp { Date.parse(date) }
     calendar_year { Date.parse(date).strftime("%Y") }
     calendar_month_name { Date.parse(date).strftime("%B") }
     calendar_quarter { "Q#{((Date.parse(date).strftime("%m").to_f + 1) / 3).round}" }

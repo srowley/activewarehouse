@@ -33,6 +33,7 @@ describe ActiveWarehouse::Cube, :new => true do
   after(:all) do
     ProductDimension.delete_all
     DateDimension.delete_all
+    PosRetailSalesTransactionFact.delete_all
   end
   
   describe "#dimensions" do
