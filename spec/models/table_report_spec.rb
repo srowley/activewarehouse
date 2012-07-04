@@ -3,6 +3,10 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ActiveWarehouse::Report::TableReport, ".view" do
 
   before(:each) do
+    create_class("RegionalSalesCube", ActiveWarehouse::Cube)
+    RegionalSalesCube.reports_on :pos_retail_sales_transaction
+    RegionalSalesCube.pivots_on({:date => :cy}, :store)
+    
     @report = ActiveWarehouse::Report::TableReport.new(
       :title => "Regional Sales Report",
       :cube_name => :regional_sales_cube, 
@@ -12,7 +16,6 @@ describe ActiveWarehouse::Report::TableReport, ".view" do
       :row_hierarchy => :cy,
       :fact_attributes => [:cost_dollar_amount, :sales_dollar_amount]
     )
-    puts "foo"
   end
 
   it "should return a TableView instance" do
