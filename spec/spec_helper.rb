@@ -18,6 +18,7 @@ when "sqlite3"
   #don't need to do anything
 when "mysql"
   system "mysql -e 'create database aws_unit;' >/dev/null"
+  system "mysql -e 'set timezone 'UTC';' >/dev/null"
   abort "failed to create mysql database" unless $?.success?
 when "postgres"
   system "psql -c 'create database aws_unit;' -U postgres >/dev/null"
