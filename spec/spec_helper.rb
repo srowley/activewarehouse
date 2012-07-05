@@ -18,7 +18,7 @@ when "sqlite3"
   #don't need to do anything
 when "mysql"
   system "mysql -e 'create database aws_unit;' >/dev/null"
-  system "mysql -e 'set timezone 'UTC';' >/dev/null"
+  system "mysql -e 'set time_zone 'UTC';' >/dev/null"
   abort "failed to create mysql database" unless $?.success?
 when "postgres"
   system "psql -c 'create database aws_unit;' -U postgres >/dev/null"
@@ -31,6 +31,7 @@ ActiveRecord::Base.establish_connection(db)
 
 # TODO: figure out why setting tz to UTC breaks one of the SCD specs.
 ActiveRecord::Base.default_timezone = :utc
+ActiveRecord::Base.time_zone_aware_attributes = false
 
 RSpec.configure do |config|
   # Requires supporting ruby files with custom matchers and macros, etc,
