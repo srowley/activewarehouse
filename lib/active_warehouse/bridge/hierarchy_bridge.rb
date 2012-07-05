@@ -1,6 +1,9 @@
 module ActiveWarehouse #:nodoc:
   # Bridge class that models ragged hierarchies.
   class HierarchyBridge < Bridge
+    
+    self.abstract_class = true
+    
     class << self
       def set_levels_from_parent(name)
         @levels_from_parent = name

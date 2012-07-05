@@ -1,6 +1,9 @@
 module ActiveWarehouse #:nodoc
   # Implements a bridge table.
   class Bridge < ActiveRecord::Base
+    
+    self.abstract_class = true
+    
     class << self
       # Get the table name. By default the table name will be the name of the
       # bridge in singular form.

@@ -32,6 +32,15 @@ module ActiveWarehouse #:nodoc:
 
         ActiveWarehouse::View::TableView.new(self, params, options)
       end
+      
+      # TODO: figure out how tests passed with abstract report calling super
+      # and this method not implemented.
+      def initialize(attributes = {})
+        attributes.each do |name, value|
+          send("#{name}=", value)
+        end
+      end
+      
     end
   end
 end

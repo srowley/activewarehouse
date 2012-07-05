@@ -18,11 +18,6 @@ desc "Run all specs"
 RSpec::Core::RakeTask.new(:spec) do |spec|
   spec.pattern = 'spec/**/*_spec.rb'
   spec.rspec_opts = ['--backtrace']
-  # unless ENV['NO_RCOV']
-  #   spec.rcov = true
-  #   spec.rcov_dir = '../doc/output/coverage'
-  #   spec.rcov_opts = ['--exclude', 'spec\/spec,bin\/spec,examples,\/var\/lib\/gems,\/Library\/Ruby,\.autotest']
-  # end
 end
 
 def system!(cmd)
@@ -30,7 +25,7 @@ def system!(cmd)
   raise "Command failed!" unless system(cmd)
 end
 
-require 'tasks/standalone_migrations'
+# require 'tasks/standalone_migrations'
 
 # experimental tasks to reproduce the Travis behaviour locally
 namespace :ci do
