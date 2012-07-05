@@ -14,6 +14,8 @@ configuration = configurations[db]
 ActiveRecord::Base.configurations = { db => configuration }
 
 case db
+when "sqlite3"
+  #don't need to do anything
 when "mysql"
   system "mysql -e 'create database aws_unit;' >/dev/null"
   abort "failed to create mysql database" unless $?.success?

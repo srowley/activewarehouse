@@ -6,5 +6,6 @@ gemfile:
 rvm:
   - 1.9.3
 env:
+  - DB=sqlite3
   - DB=mysql
   - DB=postgres
