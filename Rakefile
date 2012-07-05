@@ -1,18 +1,10 @@
 require 'bundler'
 Bundler::GemHelper.install_tasks
 require 'rake'
-require 'rake/testtask'
 require "rspec/core/rake_task" 
 
-desc 'Default: run tests and specs.'
-task :default => [:test, :spec]
-
-desc 'Test the active_warehouse plugin.'
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = true
-end
+desc 'Default: run specs.'
+task :default => :spec
 
 desc "Run all specs"
 RSpec::Core::RakeTask.new(:spec) do |spec|
@@ -24,8 +16,6 @@ def system!(cmd)
   puts cmd
   raise "Command failed!" unless system(cmd)
 end
-
-# require 'tasks/standalone_migrations'
 
 # experimental tasks to reproduce the Travis behaviour locally
 namespace :ci do
