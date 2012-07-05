@@ -12,6 +12,18 @@ raise "no configuration for '#{db}'" unless configurations.key? db
 
 configuration = configurations[db]  
 ActiveRecord::Base.configurations = { db => configuration }
+
+case db
+when "mysql"
+  system "mysql -e 'create database aws_unit;' >/dev/null"
+  abort "failed to create mysql database" unless $?.success?
+when "postgres"
+  system "psql -c 'create database aws_unit;' -U postgres >/dev/null"
+  abort "failed to create postgres database" unless $?.success?
+else
+  raise "database in #{db} environment not created."
+end
+
 ActiveRecord::Base.establish_connection(db)
 
 # TODO: figure out why setting tz to UTC breaks one of the SCD specs.

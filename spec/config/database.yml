@@ -6,7 +6,7 @@ sqlite3:
 mysql:
   adapter: mysql
   database: aws_unit
-  username:
+  username: root
   encoding: utf8
 
 postgres:
