@@ -76,6 +76,7 @@ describe ActiveWarehouse::Aggregate::NoAggregate, :new => true do
     DailySalesFact.delete_all
     ProductDimension.unscoped.delete_all
     DateDimension.delete_all
+    CustomerDimension.delete_all
   end
   
   describe "#query" do

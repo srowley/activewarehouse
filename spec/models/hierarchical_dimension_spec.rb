@@ -35,6 +35,10 @@ describe "HierarchicalDimension", :new => true do
                                                                       :bottom_flag => 'Y')
   end
   
+  after(:all) do
+    CustomerDimension.delete_all
+  end
+  
   describe "#bridge_class" do
     it "returns the bridge class for a given dimension class" do
       CustomerDimension.bridge_class.should == CustomerHierarchyBridge
