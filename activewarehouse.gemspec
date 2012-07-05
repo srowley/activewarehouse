@@ -29,8 +29,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency('guard')
   s.add_development_dependency('guard-test')
   s.add_development_dependency('guard-rspec')
+  s.add_development_dependency('sqlite3')
   s.add_development_dependency('rspec', '>=2.8.1')
-  s.add_development_dependency('activewarehouse-etl', '> 0.9.5')
+  s.add_development_dependency('factory_girl_rails', '>=3.3.0')
 
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {test}/*`.split("\n")
