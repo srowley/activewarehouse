@@ -18,6 +18,7 @@ def declare_gems(rails_version)
 
   gem 'pg'
   gem 'rspec'
+  gem 'factory_girl_rails'
   
   gem 'awesome_print'
   gem 'rake'
