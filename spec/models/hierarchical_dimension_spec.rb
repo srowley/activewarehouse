@@ -37,6 +37,7 @@ describe "HierarchicalDimension", :new => true do
   
   after(:all) do
     CustomerDimension.delete_all
+    CustomerHierarchyBridge.delete_all
   end
   
   describe "#bridge_class" do
