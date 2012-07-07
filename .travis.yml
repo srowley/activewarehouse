@@ -1,12 +1,12 @@
 language: ruby
-# gemfile:
-#   - test/config/gemfiles/Gemfile.rails-3.2.x
-#  - test/config/gemfiles/Gemfile.rails-3.1.x
-#  - test/config/gemfiles/Gemfile.rails-3.0.x
+branches:
+  only:
+    - travis_or_die
+gemfile:
+   - test/config/gemfiles/Gemfile.rails-3.2.x
 rvm:
   - 1.9.3
 env:
+  - DB=sqlite3
   - DB=mysql
   - DB=postgres
-before_script:
-  - bundle exec rake db:create DB=$DB
