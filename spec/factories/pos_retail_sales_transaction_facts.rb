@@ -22,5 +22,5 @@ FactoryGirl.define do
     cost_dollar_amount 2.5
     gross_profit_dollar_amount 0.25
   end
-                              
+                          
 end

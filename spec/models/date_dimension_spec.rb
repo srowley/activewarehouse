@@ -12,6 +12,7 @@ describe "ActiveWarehouse::DateDimension", :new => true do
     it "sets the sql_date_stamp to the passed string" do
       ActiveWarehouse::DateDimension.set_sql_date_stamp 'full_date'
       ActiveWarehouse::DateDimension.sql_date_stamp.should == 'full_date'
+      ActiveWarehouse::DateDimension.set_sql_date_stamp 'sql_date_stamp' #breaks if examples not in order, so reset. yuck.
     end
   end
 

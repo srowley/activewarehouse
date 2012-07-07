@@ -3,6 +3,7 @@ require 'active_record'
 require 'activewarehouse'
 require 'factory_girl_rails'
 require 'support/setup'
+require 'database_cleaner'
 
 # Basically stolen from will_paginate's ActiveRecord test setup.
 db = ENV['DB'].blank?? 'sqlite3' : ENV['DB']
@@ -36,8 +37,10 @@ RSpec.configure do |config|
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
   Dir[("./support/**/*.rb")].each {|f| require f}
-      
+  
+  #config.exclusion_filter = { :skip => true }
   config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
     set_up_classes
     FactoryGirl.reload # Don't think FactoryGirl can register factories for classes until classes exist
   end
