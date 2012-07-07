@@ -286,7 +286,8 @@ module ActiveWarehouse #:nodoc
           nodes = {nil => root}
           level_list = levels.collect{|level| connection.quote_column_name(level) }.join(',')
           order = self.order || level_list
-          find(:all, :select => level_list, :group => level_list, :order => order).each do |dim|
+          select_clause = self.order ? "#{level_list}, count(#{order})" : level_list
+          find(:all, :select => select_clause, :group => level_list, :order => order).each do |dim|
             parent_node = root
             levels.each do |level|
               node_value = dim.send(level)
