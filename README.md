@@ -1,7 +1,9 @@
 ## ActiveWarehouse
 
 The ActiveWarehouse library provides classes and functions which help with
-building data warehouses using Rails. 
+building data warehouses using Rails.
+
+[![Build Status](https://secure.travis-ci.org/srowley/activewarehouse.png?branch=master)](http://travis-ci.org/srowley/activewarehouse)
 
 This is my fork of the project. I am just a Ruby/Rails hobbyist, but I have a bit of experience with data warehousing, so I had thought about doing something just like this before I found out about it.
 
