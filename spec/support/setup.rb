@@ -24,7 +24,7 @@ def create_date_dimension
       t.column :calendar_year, :string, :null => false                      # 2005, 2006, 2007, etc.
       t.column :calendar_quarter, :string, :null => false, :limit => 2      # Q1, Q2, Q3 or Q4
       t.column :calendar_month_name, :string, :null => false, :limit => 9   # January, February, etc.
-      t.column :calendar_week, :string, :null => false, :limit => 2         # 1, 2, 3, ... 52
+      t.column :calendar_week, :string, :null => false, :limit => 7         # Week 1, Week 2,... Week 52
       t.column :day_of_week, :string, :null => false, :limit => 9           # Monday, Tuesday, etc.
       t.column :sql_date_stamp, :date
     end
