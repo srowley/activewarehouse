@@ -26,6 +26,7 @@ def declare_gems(rails_version)
   gem 'shoulda', '3.0.1'
   gem 'sqlite3'
   gem 'rspec'
+  gem 'database_cleaner'
   
   gem 'spreadsheet'
   gem 'nokogiri'
