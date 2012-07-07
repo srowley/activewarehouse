@@ -1,7 +1,4 @@
 language: ruby
-branches:
-  only:
-    - travis_or_die
 gemfile:
    - test/config/gemfiles/Gemfile.rails-3.2.x
 rvm:
