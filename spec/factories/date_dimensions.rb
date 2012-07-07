@@ -8,10 +8,6 @@ FactoryGirl.define do
     calendar_week { "Week #{sql_date_stamp.strftime("%-V")}" }
     day_of_week { sql_date_stamp.strftime("%A") }
     
-    factory :date_incremented_by_day, :class => DateDimension do
-      sequence(:date) { |n| (Time.utc(2000,12,31) + n.days).to_s }
-    end
-    
     factory :specific_date, :class => DateDimension do
       date "2001-01-01"
     end

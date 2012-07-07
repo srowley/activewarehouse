@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ActiveWarehouse::Dimension do
   before(:all) do
     (Date.new(2001, 1, 1)..Date.new(2008, 12, 31)).each do |date|
-      FactoryGirl.create(:date_incremented_by_day)
+      FactoryGirl.create(:specific_date, :date => date.strftime("%Y-%m-%d"))
     end
   end
   
