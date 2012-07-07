@@ -285,8 +285,8 @@ module ActiveWarehouse #:nodoc
           levels = hierarchy(hierarchy_name)
           nodes = {nil => root}
           level_list = levels.collect{|level| connection.quote_column_name(level) }.join(',')
-          order = self.order || level_list
-          select_clause = self.order ? "#{level_list}, count(#{order})" : level_list
+          order = "max(#{self.order})" || level_list
+          select_clause = self.order ? "#{level_list}, #{order}" : level_list
           find(:all, :select => select_clause, :group => level_list, :order => order).each do |dim|
             parent_node = root
             levels.each do |level|
