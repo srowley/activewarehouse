@@ -7,11 +7,13 @@ building data warehouses using Rails.
 
 This is my fork of the project. I am just a Ruby/Rails hobbyist, but I have a bit of experience with data warehousing, so I had thought about doing something just like this before I found out about it.
 
-I will probably make wholesale changes to the tests and the code. In particular I'd like to move all the tests to RSpec, just because done well, specs can really document your intent beautifully. I also want to add a bit more magic to the generators to make setting up a simple warehouse as easy as it should be. I also don't really like all the fixtures setup, so I might see if that can be done with factories instead.
+I'm making wholesale changes to the tests. The tests have been ported to RSpec and the fixture replaced with factories, among other things. Mainly I just wanted to learn more by doing with RSpec and FactoryGirl, but I also think that done right those tools help you document your intent beautifully (which is not to call what I've accomplished there beauty, by any means), and the port gave me a nice overview of the codebase at the same time. There were some other test changes too, see the README in the spec directory.
 
-The rest of this README is an edited version of the original. I am also planning to use this fork in a sample project, but it's not worth getting into that yet.
-  
-I don't recommend using this fork in your project yet.
+Next I think I'll try to get a very simple example working - links will be here when I have them. Then on to a few improvements to the generators, hopefully.
+
+I don't recommend using this fork in your project yet if ever because this is just a for-fun project for me for now.
+
+The rest of this README is an edited version of the original.
 
 ## Generators
 
