@@ -1,5 +1,8 @@
 TODO list:
 
+* Tests for the generators
 * Modify the fact generator so that the migration has a map for foreign keay and a map for fact attributes. The foreign keys can then automatically be indexed as that is pretty much standard behavior.
 * Make the belongs_to connection between facts and dimensions automatic.
 * Change the terminology from "hierarchical dimension" to "recursive dimension" or something else less confusing.
+* More Arel, less SQL in query generation.
+* Pipelined ROLAP working in SQLite & PostgreSQL
