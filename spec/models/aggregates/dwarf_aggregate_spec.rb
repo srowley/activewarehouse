@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ActiveWarehouse::Aggregate::DwarfAggregate, :new => true do
+describe ActiveWarehouse::Aggregate::DwarfAggregate do
   
   # TODO: the original test didn't check to see if this raised an error.
   # It actually made no assertions at all. So this is no worse, I guess.

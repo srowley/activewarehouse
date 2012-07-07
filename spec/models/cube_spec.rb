@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActiveWarehouse::Cube, :skip => true do
+describe ActiveWarehouse::Cube do
   
   before(:all) do
     

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ActiveWarehouse::Aggregate::PipelinedRolapAggregate, :new => true do
+describe ActiveWarehouse::Aggregate::PipelinedRolapAggregate do
   
   before(:all) do
     create_class("RollupSalesTransactionsCube", ActiveWarehouse::Cube)

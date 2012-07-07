@@ -1,4 +1,4 @@
-describe ActiveWarehouse::Field, :new => true do
+describe ActiveWarehouse::Field do
   
   before(:each) do
     @field = ActiveWarehouse::AggregateField.new(StoreInventorySnapshotFact, 

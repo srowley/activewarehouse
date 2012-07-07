@@ -38,7 +38,6 @@ RSpec.configure do |config|
   # in spec/support/ and its subdirectories.
   Dir[("./support/**/*.rb")].each {|f| require f}
   
-  #config.exclusion_filter = { :skip => true }
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     set_up_classes

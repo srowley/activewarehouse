@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActiveWarehouse::CalculatedField, :new => true  do
+describe ActiveWarehouse::CalculatedField do
   
   before(:each) do
     @field = ActiveWarehouse::CalculatedField.new(

@@ -2,7 +2,7 @@ require "spec_helper"
 
 # TODO: these tests were commented out in the original suite. Investigate.
 
-describe ActiveWarehouse::Aggregate::PidAggregate, :new => true do
+describe ActiveWarehouse::Aggregate::PidAggregate do
   #   def test_populate
   #    assert_nothing_raised do
   #      agg = ActiveWarehouse::Aggregate::PidAggregate.new(MultiDimensionalRegionalSalesCube)

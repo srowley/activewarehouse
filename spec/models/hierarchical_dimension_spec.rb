@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "HierarchicalDimension", :new => true do
+describe "HierarchicalDimension" do
   
   before(:all) do
     @bob_smith = FactoryGirl.create(:customer, :customer_name => "Bob Smith")

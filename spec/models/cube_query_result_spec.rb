@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ActiveWarehouse::CubeQueryResult, :new => true do
+describe ActiveWarehouse::CubeQueryResult do
   
   before(:each) do
     @cqr = ActiveWarehouse::CubeQueryResult.new(StoreInventorySnapshotFact.aggregate_fields)

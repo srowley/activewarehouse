@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActiveWarehouse::HierarchyBridge, :new => true do
+describe ActiveWarehouse::HierarchyBridge do
   
   #TODO: address the yuckiness of changing class attribute values in tests
   

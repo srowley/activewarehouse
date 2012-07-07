@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ActiveWarehouse::SlowlyChangingDimension, :new => true do
+describe ActiveWarehouse::SlowlyChangingDimension do
 
   before(:all) do
     @old_product = FactoryGirl.create(:base_product, :expiration_date => Time.gm(2006, 11, 30), :latest_version => 0)

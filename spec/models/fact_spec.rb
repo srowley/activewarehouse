@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ActiveWarehouse::Fact, :new => true do  
+describe ActiveWarehouse::Fact do  
   describe "#dimensions" do
     it "returns an array of the fact table's dimensions'" do
       PosRetailSalesTransactionFact.dimensions.sort { |a, b| a.to_s <=> b.to_s}.should == [:customer, :date, :product, :promotion, :store]

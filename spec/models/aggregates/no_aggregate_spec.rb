@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe ActiveWarehouse::Aggregate::NoAggregate, :new => true do
+describe ActiveWarehouse::Aggregate::NoAggregate do
   before(:all) do
     
     ActiveWarehouse::DateDimension.set_sql_date_stamp 'sql_date_stamp'

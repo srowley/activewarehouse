@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "ActiveWarehouse::DateDimension", :new => true do
+describe "ActiveWarehouse::DateDimension" do
   
   describe "#sql_date_stamp" do
     it "returns 'sql_date_stamp' by default" do
