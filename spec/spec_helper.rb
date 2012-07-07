@@ -3,6 +3,7 @@ require 'active_record'
 require 'activewarehouse'
 require 'factory_girl_rails'
 require 'support/setup'
+require 'database_cleaner'
 
 # Basically stolen from will_paginate's ActiveRecord test setup.
 db = ENV['DB'].blank?? 'sqlite3' : ENV['DB']
@@ -14,6 +15,8 @@ configuration = configurations[db]
 ActiveRecord::Base.configurations = { db => configuration }
 
 case db
+when "sqlite3"
+  #don't need to do anything
 when "mysql"
   system "mysql -e 'create database aws_unit;' >/dev/null"
   abort "failed to create mysql database" unless $?.success?
@@ -27,14 +30,17 @@ end
 ActiveRecord::Base.establish_connection(db)
 
 # TODO: figure out why setting tz to UTC breaks one of the SCD specs.
-# ActiveRecord::Base.default_timezone = :utc
+ActiveRecord::Base.default_timezone = :utc
+ActiveRecord::Base.time_zone_aware_attributes = false
 
 RSpec.configure do |config|
   # Requires supporting ruby files with custom matchers and macros, etc,
   # in spec/support/ and its subdirectories.
   Dir[("./support/**/*.rb")].each {|f| require f}
-      
+  
+  #config.exclusion_filter = { :skip => true }
   config.before(:suite) do
+    DatabaseCleaner.strategy = :truncation
     set_up_classes
     FactoryGirl.reload # Don't think FactoryGirl can register factories for classes until classes exist
   end

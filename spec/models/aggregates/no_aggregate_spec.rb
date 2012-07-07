@@ -4,10 +4,11 @@ describe ActiveWarehouse::Aggregate::NoAggregate, :new => true do
   before(:all) do
     
     ActiveWarehouse::DateDimension.set_sql_date_stamp 'sql_date_stamp'
+    
     @bob_smith = FactoryGirl.create(:customer, :customer_name => "Bob Smith")
     @jane_doe = FactoryGirl.create(:customer, :customer_name => "Jane Doe")
     @jimmy_dean = FactoryGirl.create(:customer, :customer_name => "Jimmy Dean")
-    
+
     @root_customer = FactoryGirl.create(:root_customer, :parent_id => @bob_smith.id,
                                                       :child_id => @bob_smith.id)
                                                       
@@ -72,9 +73,7 @@ describe ActiveWarehouse::Aggregate::NoAggregate, :new => true do
   end
   
   after(:all) do
-    PosRetailSalesTransactionFact.delete_all
-    DailySalesFact.delete_all
-    ProductDimension.unscoped.delete_all
+    DatabaseCleaner.clean
   end
   
   describe "#query" do
@@ -316,6 +315,7 @@ describe ActiveWarehouse::Aggregate::NoAggregate, :new => true do
         values['Sum of Gross Profit'].should be_within(0.01).of(1.25)
 
         values = results.values('Bob Smith', 'Tuesday')
+        
         values['Sum of Sales Quantity'].should == 6
         values['Sum of Sales Quantity Self'].should == 2
         values['Sum of Sales Quantity Me and Immediate children'].should == 4
@@ -334,7 +334,6 @@ describe ActiveWarehouse::Aggregate::NoAggregate, :new => true do
         values['Sum of Gross Profit'].should be_within(0.01).of(0)
         values['Sales Quantity Count'].should == 0
         values['Avg Sales Amount'].should be_within(0.01).of(0)
-        
       
         filters = {'date.calendar_year' => '2002'}
       

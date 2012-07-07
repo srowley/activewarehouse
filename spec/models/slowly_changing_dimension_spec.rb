@@ -9,7 +9,7 @@ describe ActiveWarehouse::SlowlyChangingDimension, :new => true do
   end
   
   after(:all) do
-    ProductDimension.unscoped.delete_all
+    DatabaseCleaner.clean
   end
 
   describe "#latest_version_attribute" do
